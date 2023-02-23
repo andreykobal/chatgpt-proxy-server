@@ -1,6 +1,5 @@
 const express = require('express');
 const dotenv = require('dotenv-safe');
-const fetch = require('node-fetch');
 dotenv.config();
 
 const app = express();
@@ -8,6 +7,7 @@ const app = express();
 app.use(express.json());
 
 app.post('/', async (req, res) => {
+  const fetch = await import('node-fetch').then(module => module.default);
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
