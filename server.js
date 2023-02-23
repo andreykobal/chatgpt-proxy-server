@@ -44,7 +44,7 @@ app.post('/', async (req, res) => {
     }
   );
 
-  const response = "Response 1: " + res1.text + "\n Response 2: "  + res2.text;
+  const response = res1.text + "\n"  + res2.text;
 
   res.send(response);
 });
