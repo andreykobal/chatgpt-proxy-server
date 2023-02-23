@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv-safe');
+const fetch = require('node-fetch');
 dotenv.config();
 
 const app = express();
@@ -7,11 +8,19 @@ const app = express();
 app.use(express.json());
 
 app.post('/', async (req, res) => {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: 'forbiddenua@gmail.com', password: '99apofID' })
+  };
+  const authResponse = await fetch('https://open-ai-auth.herokuapp.com/auth', requestOptions);
+  const authData = await authResponse.json();
+
   const { ChatGPTUnofficialProxyAPI } = await import('chatgpt');
   const ora = await import('ora');
 
   const api = new ChatGPTUnofficialProxyAPI({
-    accessToken: process.env.OPENAI_ACCESS_TOKEN,
+    accessToken: authData.access_token,
     debug: false
   });
 
