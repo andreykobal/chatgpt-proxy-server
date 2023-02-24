@@ -34,7 +34,11 @@ const startChat = async (inputPrompt, accessToken) => {
   }
 };
 
-parentPort.on('message', async ({ inputPrompt, accessToken }) => {
-  const response = await startChat(inputPrompt, accessToken);
-  parentPort.postMessage(response);
-});
+// Wait for parentPort to be defined before starting the worker code
+if (parentPort) {
+    parentPort.on('message', async ({ inputPrompt, accessToken }) => {
+      const response = await startChat(inputPrompt, accessToken);
+      parentPort.postMessage(response);
+    });
+  }
+  
