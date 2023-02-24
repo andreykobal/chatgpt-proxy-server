@@ -35,6 +35,8 @@ const startChat = async (inputPrompt, accessToken) => {
 };
 
 parentPort.on('message', async ({ inputPrompt, accessToken }) => {
-  const response = await startChat(inputPrompt, accessToken);
-  parentPort.postMessage(response);
+  parentPort.on('message', async ({ inputPrompt, accessToken }) => {
+    const response = await startChat(inputPrompt, accessToken);
+    parentPort.postMessage(response);
+  });
 });
