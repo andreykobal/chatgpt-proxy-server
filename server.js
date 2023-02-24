@@ -21,7 +21,10 @@ app.post('/', async (req, res) => {
   const accessToken = authData.access_token;
   const inputPrompt = req.body.inputString;
 
-  const worker = new Worker('__filename');
+  const path = require('path');
+  const workerPath = path.join(__dirname, 'worker.js');
+  const worker = new Worker(workerPath);
+  
   worker.on('message', (message) => {
     res.send(message);
   });
