@@ -7,6 +7,7 @@ const app = express();
 app.use(express.json());
 
 const startChat = async (inputPrompt, accessToken) => {
+  global.result = "";
   const { ChatGPTUnofficialProxyAPI } = await import('chatgpt');
   const ora = await import('ora');
   const api = new ChatGPTUnofficialProxyAPI({
@@ -57,7 +58,7 @@ app.post('/', async (req, res) => {
 });
 
 app.get('/result', (req, res) => {
-  if (global.result) {
+  if (global.result.lenght > 0) {
     res.send(global.result);
   } else {
     res.status(404).send('Result not ready');
