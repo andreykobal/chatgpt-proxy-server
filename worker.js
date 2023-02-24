@@ -1,8 +1,8 @@
 const { parentPort } = require('worker_threads');
-const { ChatGPTUnofficialProxyAPI } = require('chatgpt');
-const ora = require('ora');
 
 parentPort.on('message', async ({ inputPrompt, accessToken }) => {
+  const { ChatGPTUnofficialProxyAPI } = await import('chatgpt');
+  const ora = await import('ora');
   const api = new ChatGPTUnofficialProxyAPI({
     accessToken,
     debug: false
