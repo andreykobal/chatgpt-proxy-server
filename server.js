@@ -16,7 +16,7 @@ headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({ email: 'forbiddenua@gmail.com', password: '99apofID' })
 };
 const authResponse = await fetch('https://open-ai-auth.herokuapp.com/auth', requestOptions);
-const authData = await authResponse.json();ы
+const authData = await authResponse.json();
 
 const accessToken = authData.access_token;
 const inputPrompt = req.body.inputString;
