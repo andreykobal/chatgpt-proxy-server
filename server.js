@@ -44,11 +44,12 @@ app.post('/', async (req, res) => {
 });
 
 app.get('/result', (req, res) => {
-  if (global.result.length > 0) {
+  //if (global.result.length > 0) {
+    console.log(global.result);
     res.send(global.result);
-  } else {
-    res.status(404).send('Result not ready');
-  }
+  // } else {
+  //   res.status(404).send('Result not ready');
+  // }
 });
 
 const port = process.env.PORT || 3000;
