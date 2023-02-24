@@ -28,10 +28,6 @@ text: prompt2
 
 const result = res1.text + "\n" + res2.text;
 global.result = result;
-if (global.client) {
-global.client.send(result);
-global.client = null;
-}
 };
 
 if (parentPort) {
@@ -40,3 +36,4 @@ const response = await startChat(inputPrompt, accessToken);
 parentPort.postMessage(response);
 });
 }
+

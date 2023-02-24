@@ -35,28 +35,12 @@ res.status(500).send(error);
 worker.on('exit', (code) => {
 if (code !== 0) {
 console.error(new Error(`Worker stopped with exit code ${code}`));
-res.status(500).send(`Worker stopped with exit code ${code}`);ы
+res.status(500).send(`Worker stopped with exit code ${code}`);
 }
 });
 
 worker.postMessage({ inputPrompt, accessToken });
 
-const intervalId = setInterval(async () => {
-const checkResponse = await fetch('https://chatgpt-proxy-server.herokuapp.com/check');
-if (checkResponse.status === 200) {
-clearInterval(intervalId);
-res.send(await checkResponse.text());
-}
-}, 30000);
-});
-
-app.get('/check', (req, res) => {
-if (global.result) {
-res.send(global.result);
-global.result = null;
-} else {
-global.client = res;
-}
 });
 
 app.get('/result', (req, res) => {
