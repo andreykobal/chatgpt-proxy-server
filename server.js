@@ -6,7 +6,37 @@ const app = express();
 
 app.use(express.json());
 
-const { Worker } = require('worker_threads');
+const startChat = async (inputPrompt, accessToken) => {
+  const { ChatGPTUnofficialProxyAPI } = await import('chatgpt');
+  const ora = await import('ora');
+  const api = new ChatGPTUnofficialProxyAPI({
+    accessToken,
+    debug: false
+  });
+
+  let prompt = inputPrompt;
+
+  const res1 = await ora.oraPromise(api.sendMessage(prompt), {
+    text: prompt
+  });
+
+  const prompt2 = 'Finish';
+
+  const res2 = await ora.oraPromise(
+    api.sendMessage(prompt2, {
+      conversationId: res1.conversationId,
+      parentMessageId: res1.id
+    }),
+    {
+      text: prompt2
+    }
+  );
+
+  const result = res1.text + "\n" + res2.text;
+  global.result = result;
+  console.log('result:' + result);
+  console.log('global result:' + global.result);
+};
 
 app.post('/', async (req, res) => {
   const fetch = await import('node-fetch').then(module => module.default);
@@ -21,35 +51,18 @@ app.post('/', async (req, res) => {
   const accessToken = authData.access_token;
   const inputPrompt = req.body.inputString;
 
-  const path = require('path');
-  const workerPath = path.join(__dirname, 'worker.js');
-  const worker = new Worker(workerPath);
-
-  worker.on('message', (message) => {
-    console.log('Worker finished executing');
-  });
-  worker.on('error', (error) => {
-    console.error(error);
-  });
-  worker.on('exit', (code) => {
-    if (code !== 0) {
-      console.error(new Error(`Worker stopped with exit code ${code}`));
-    }
-  });
-
-  worker.postMessage({ inputPrompt, accessToken });
+  startChat(inputPrompt, accessToken);
 
   res.send('Request accepted');
-
 });
 
 app.get('/result', (req, res) => {
-  //if (global.result.length > 0) {
+  if (global.result) {
     console.log(global.result);
     res.send(global.result);
-  // } else {
-  //   res.status(404).send('Result not ready');
-  // }
+  } else {
+    res.status(404).send('Result not ready');
+  }
 });
 
 const port = process.env.PORT || 3000;
