@@ -16,7 +16,7 @@ headers: { 'Content-Type': 'application/json' },
 body: JSON.stringify({ email: 'forbiddenua@gmail.com', password: '99apofID' })
 };
 const authResponse = await fetch('https://open-ai-auth.herokuapp.com/auth', requestOptions);
-const authData = await authResponse.json();
+const authData = await authResponse.json();ы
 
 const accessToken = authData.access_token;
 const inputPrompt = req.body.inputString;
@@ -34,8 +34,8 @@ res.status(500).send(error);
 });
 worker.on('exit', (code) => {
 if (code !== 0) {
-console.error(new Error(Worker stopped with exit code ${code}));
-res.status(500).send(Worker stopped with exit code ${code});
+console.error(new Error(`Worker stopped with exit code ${code}`));
+res.status(500).send(`Worker stopped with exit code ${code}`);ы
 }
 });
 
