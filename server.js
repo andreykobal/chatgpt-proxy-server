@@ -58,7 +58,7 @@ app.post('/', async (req, res) => {
 });
 
 app.get('/result', (req, res) => {
-  if (global.result.lenght > 0) {
+  if (global.result.length > 0) {
     res.send(global.result);
   } else {
     res.status(404).send('Result not ready');
