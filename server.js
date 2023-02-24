@@ -34,7 +34,7 @@ const startChat = async (inputPrompt, accessToken) => {
 
   const result = res1.text + "\n" + res2.text;
   global.result = result;
-  console.log('result:' + result);
+  //console.log('result:' + result);
   console.log('global result:' + global.result);
 };
 
@@ -58,7 +58,6 @@ app.post('/', async (req, res) => {
 
 app.get('/result', (req, res) => {
   if (global.result) {
-    console.log(global.result);
     res.send(global.result);
   } else {
     res.status(404).send('Result not ready');
