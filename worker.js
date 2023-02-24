@@ -28,6 +28,10 @@ const startChat = async (inputPrompt, accessToken) => {
 
   const result = res1.text + "\n" + res2.text;
   global.result = result;
+  console.log('result:' + result);
+  console.log('global result:' + global.result)
+  
+
 };
 
 if (parentPort) {
