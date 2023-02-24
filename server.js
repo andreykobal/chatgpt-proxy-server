@@ -37,6 +37,31 @@ app.post('/', async (req, res) => {
   });
 
   worker.postMessage({ inputPrompt, accessToken });
+
+  const intervalId = setInterval(async () => {
+    const checkResponse = await fetch('https://chatgpt-proxy-server.herokuapp.com/check');
+    if (checkResponse.status === 200) {
+      clearInterval(intervalId);
+      res.send(await checkResponse.text());
+    }
+  }, 30000);
+});
+
+app.get('/check', (req, res) => {
+  if (global.result) {
+    res.send(global.result);
+    global.result = null;
+  } else {
+    global.client = res;
+  }
+});
+
+app.get('/result', (req, res) => {
+  if (global.result) {
+    res.send(global.result);
+  } else {
+    res.status(404).send('Result not ready');
+  }
 });
 
 const port = process.env.PORT || 3000;

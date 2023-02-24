@@ -26,8 +26,13 @@ const startChat = async (inputPrompt, accessToken) => {
     }
   );
 
-  return res1.text + "\n"  + res2.text;
-}
+  const result = res1.text + "\n"  + res2.text;
+  global.result = result;
+  if (global.client) {
+    global.client.send(result);
+    global.client = null;
+  }
+};
 
 parentPort.on('message', async ({ inputPrompt, accessToken }) => {
   const response = await startChat(inputPrompt, accessToken);
