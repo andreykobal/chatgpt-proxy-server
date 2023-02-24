@@ -1,6 +1,6 @@
 const { parentPort } = require('worker_threads');
 
-parentPort.on('message', async ({ inputPrompt, accessToken }) => {
+const startChat = async (inputPrompt, accessToken) => {
   const { ChatGPTUnofficialProxyAPI } = await import('chatgpt');
   const ora = await import('ora');
   const api = new ChatGPTUnofficialProxyAPI({
@@ -26,5 +26,10 @@ parentPort.on('message', async ({ inputPrompt, accessToken }) => {
     }
   );
 
-  parentPort.postMessage(res1.text + "\n" + res2.text);
+  return res1.text + "\n"  + res2.text;
+}
+
+parentPort.on('message', async ({ inputPrompt, accessToken }) => {
+  const response = await startChat(inputPrompt, accessToken);
+  parentPort.postMessage(response);
 });
